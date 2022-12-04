@@ -1,3 +1,5 @@
+package sprint3;
+
 import java.util.*;
 
 public class Manager {
@@ -87,7 +89,6 @@ public class Manager {
             int eId = subTaskMap.get(i).getEpicId();
             if (id == eId) {
                 delete.add(eId);
-               // subTaskMap.remove(i);
             }
         }
         for (int i = 0; i < delete.size(); i++) {
@@ -106,7 +107,7 @@ public class Manager {
     public Epic getEpicById(int id) {
         return epicMap.get(id);
     }
-    public List<Subtask> printEpicSubtasks(int epicId){
+    public ArrayList<Subtask> printEpicSubtasks(int epicId){
         if (epicMap.containsKey(epicId)){
             ArrayList<Subtask> subTasksList = epicMap.get(epicId).getSubtaskList();
             return subTasksList;

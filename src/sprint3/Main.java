@@ -1,3 +1,5 @@
+package sprint3;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -8,7 +10,7 @@ public class Main {
         Manager manager = new Manager();
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Тест меню для проверки трекера задач на функционирование: ");
+        System.out.println("Тест меню для проверки трекера задач на функционирование: id0/Task, id1/Epic, id3/SubTask");
         printMenu();
         outofwhile: while(scanner.hasNextInt()){
             int typing = scanner.nextInt();
@@ -17,17 +19,18 @@ public class Main {
                     break outofwhile;
                 case 1:
                     System.out.println("Создали задачу");
-                    String name = ("Задача " + getRandomNumber(1,10));
+                    String name = ("Задача 0");
                     String nameof = "Описание задачи...";
 
                     Task task = new Task(name, nameof, StatusOfTask.NEW);
                     manager.createTask(task);
+                    System.out.println(manager.taskMap.get(0).getStatus());
 
                     printMenu();
                     break;
                 case 2:
                     System.out.println("Создали новую подзадачу");
-                    String name1 = ("Подзадача " + getRandomNumber(1,10));
+                    String name1 = ("Подзадача 1");
                     String nameof1 = "Описание подзадачи...";
                     int epicId = 1;
                     Subtask subtask1 = new Subtask(name1, nameof1, StatusOfTask.NEW, epicId);
@@ -39,10 +42,11 @@ public class Main {
                     break;
                 case 3:
                     System.out.println("Создали новый эпик");
-                    String name2 = ("Эпик " + getRandomNumber(1,10));
+                    String name2 = ("Эпик 1");
 
                     Epic epic = new Epic(name2, StatusOfTask.NEW);
                     manager.createEpic(epic);
+                    System.out.println(manager.epicMap.get(1).statusOfTask1);
 
                     printMenu();
                     break;
@@ -57,30 +61,33 @@ public class Main {
                     printMenu();
                     break;
                 case 5:
-                    System.out.println("Создали задачу");
-                    String nameUp = ("Задача " + getRandomNumber(1,10));
+                    System.out.println("Update задачу");
+                    String nameUp = ("Задача 0");
                     String nameofUp = "Описание задачи...";
 
-                    Task taskUp = new Task(nameUp, nameofUp, StatusOfTask.IN_PROGRESS);
+                    Task taskUp = new Task(nameUp, nameofUp, StatusOfTask.IN_PROGRESS, 0);
 
                     manager.updateTask(taskUp);
+                    System.out.println(manager.taskMap.get(0).getStatus());
                     printMenu();
                     break;
                 case 6:
-                    System.out.println("Создали новый эпик");
-                    String name2Up = ("Эпик " + getRandomNumber(1,10));
+                    System.out.println("Обновляем эпик 1");
+                    String name2Up = ("Эпик 1");
+                    ArrayList<Subtask> subTaskList =  manager.printEpicSubtasks(1);
 
-                    Epic epicUp = new Epic(name2Up, StatusOfTask.IN_PROGRESS);
+                    Epic epicUp = new Epic(name2Up, subTaskList, StatusOfTask.IN_PROGRESS, 1);
                     manager.updateEpic(epicUp);
+                    System.out.println(manager.epicMap.get(1).statusOfTask1);
 
                     printMenu();
                     break;
                 case 7:
-                    System.out.println("Создали новую подзадачу");
-                    String name1Up = ("Подзадача " + getRandomNumber(1,10));
+                    System.out.println("Update подзадачу");
+                    String name1Up = ("Подзадача 1");
                     String nameof1Up = "Описание подзадачи...";
                     epicId = 1;
-                    Subtask subtaskUp = new Subtask(name1Up, nameof1Up, StatusOfTask.DONE, epicId);
+                    Subtask subtaskUp = new Subtask(name1Up, nameof1Up, StatusOfTask.DONE, epicId, 3);
 
                     manager.updateSubtask(epicId, subtaskUp);
                     printMenu();
@@ -104,23 +111,21 @@ public class Main {
                     System.out.println("Выбор неверный.");
             }
         }
-    } public static int getRandomNumber(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
     }
 
 
 
     public static void printMenu(){
-        System.out.println("1 - Создать Task ");
-        System.out.println("2 - Создать Subtask");
-        System.out.println("3 - Создать Epic");
+        System.out.println("1 - Создать sprint3.Task ");
+        System.out.println("2 - Создать sprint3.Subtask");
+        System.out.println("3 - Создать sprint3.Epic");
         System.out.println("4 - Напечатать список");
-        System.out.println("5 - Обновить Task ");
-        System.out.println("6 - Обновить Subtask");
-        System.out.println("7 - Обновить Epic");
-        System.out.println("8 - Удалить Task ");
-        System.out.println("9 - Удалить Subtask");
-        System.out.println("10 - Удалить Epic");
+        System.out.println("5 - Обновить sprint3.Task ");
+        System.out.println("6 - Обновить sprint3.Subtask");
+        System.out.println("7 - Обновить sprint3.Epic");
+        System.out.println("8 - Удалить sprint3.Task ");
+        System.out.println("9 - Удалить sprint3.Subtask");
+        System.out.println("10 - Удалить sprint3.Epic");
         System.out.println("0 - выход");
     }
 }

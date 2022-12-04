@@ -1,3 +1,5 @@
+package sprint3;
+
 import java.util.ArrayList;
 
 public class Epic extends Task{
@@ -7,10 +9,11 @@ public class Epic extends Task{
     public Epic() {
     }
 
-    public Epic (String name, ArrayList<Subtask> subtaskList, StatusOfTask statusOfTask) {
+    public Epic (String name, ArrayList<Subtask> subtaskList, StatusOfTask statusOfTask, int id) {
         this.name = name;
         this.subtaskList = subtaskList;
         this.statusOfTask1 = statusOfTask;
+        this.taskid = id;
     }
     public Epic(String name, StatusOfTask statusOfTask){
         this.name = name;
