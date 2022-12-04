@@ -2,17 +2,17 @@ package sprint3;
 
 public class Task {
     public String name;
-    public String nameof;
+    public String description;
     private StatusOfTask statusOfTask;
     protected Integer taskid;
-    public Task(String name, String nameof, StatusOfTask statusOfTask) {
+    public Task(String name, String description, StatusOfTask statusOfTask) {
         this.name = name;
-        this.nameof = nameof;
+        this.description = description;
         this.statusOfTask = statusOfTask;
     }
-    public Task(String name, String nameof, StatusOfTask statusOfTask, int id) {
+    public Task(String name, String description, StatusOfTask statusOfTask, int id) {
         this.name = name;
-        this.nameof = nameof;
+        this.description = description;
         this.statusOfTask = statusOfTask;
         this.taskid = id;
     }

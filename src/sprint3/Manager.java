@@ -3,13 +3,21 @@ package sprint3;
 import java.util.*;
 
 public class Manager {
-    Integer id = 0;
+    private Integer id = 0;
+
     HashMap<Integer,Task> taskMap = new HashMap<>(); // Integer = ID
     HashMap<Integer,Epic> epicMap = new HashMap<>();
     HashMap<Integer, Subtask> subTaskMap = new HashMap<>();
+
     public Manager() {
     }
+    public Integer getId() {
+        return id;
+    }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public void createTask(Task task2) {
         int taskId = id;
         taskMap.put(taskId, task2);
@@ -33,7 +41,7 @@ public class Manager {
         ArrayList<String> allTasks = new ArrayList<>();
         for (int k: taskMap.keySet()){
            String content = taskMap.get(k).name;
-            String content1 = taskMap.get(k).nameof;
+            String content1 = taskMap.get(k).description;
             allTasks.add(content);
             allTasks.add(content1);
         }
@@ -42,7 +50,7 @@ public class Manager {
     public List<String> printArrayAllSubTasks() {
         ArrayList<String> allSubTasks = new ArrayList<>();
         for (int k : subTaskMap.keySet()) {
-            String content = subTaskMap.get(k).name + subTaskMap.get(k).nameof;
+            String content = subTaskMap.get(k).name + subTaskMap.get(k).description;
             allSubTasks.add(content);
         }
         return allSubTasks;
@@ -65,6 +73,8 @@ public class Manager {
 
     public void updateSubtask(int epicId, Subtask subtask) {
         subTaskMap.put(subtask.getId(), subtask);
+        epicMap.get(epicId).getSubtaskList().add(subtask);
+        epicMap.get(epicId).setEpicStatus();
     }
 
     public void deleteAllTasks() {

@@ -20,9 +20,9 @@ public class Main {
                 case 1:
                     System.out.println("Создали задачу");
                     String name = ("Задача 0");
-                    String nameof = "Описание задачи...";
+                    String description = "Описание задачи...";
 
-                    Task task = new Task(name, nameof, StatusOfTask.NEW);
+                    Task task = new Task(name, description, StatusOfTask.NEW);
                     manager.createTask(task);
                     System.out.println(manager.taskMap.get(0).getStatus());
 
@@ -31,12 +31,10 @@ public class Main {
                 case 2:
                     System.out.println("Создали новую подзадачу");
                     String name1 = ("Подзадача 1");
-                    String nameof1 = "Описание подзадачи...";
+                    String description1 = "Описание подзадачи...";
                     int epicId = 1;
-                    Subtask subtask1 = new Subtask(name1, nameof1, StatusOfTask.NEW, epicId);
-                    Subtask subtask2 = new Subtask(name1, nameof1, StatusOfTask.NEW, epicId);
+                    Subtask subtask1 = new Subtask(name1, description1, StatusOfTask.NEW, epicId);
                     manager.createSubtask(subtask1, epicId);
-                    manager.createSubtask(subtask2, epicId);
 
                     printMenu();
                     break;
@@ -63,9 +61,9 @@ public class Main {
                 case 5:
                     System.out.println("Update задачу");
                     String nameUp = ("Задача 0");
-                    String nameofUp = "Описание задачи...";
+                    String descriptionUp = "Описание задачи...";
 
-                    Task taskUp = new Task(nameUp, nameofUp, StatusOfTask.IN_PROGRESS, 0);
+                    Task taskUp = new Task(nameUp, descriptionUp, StatusOfTask.IN_PROGRESS, 0);
 
                     manager.updateTask(taskUp);
                     System.out.println(manager.taskMap.get(0).getStatus());
@@ -76,7 +74,7 @@ public class Main {
                     String name2Up = ("Эпик 1");
                     ArrayList<Subtask> subTaskList =  manager.printEpicSubtasks(1);
 
-                    Epic epicUp = new Epic(name2Up, subTaskList, StatusOfTask.IN_PROGRESS, 1);
+                    Epic epicUp = new Epic(name2Up, subTaskList, 1);
                     manager.updateEpic(epicUp);
                     System.out.println(manager.epicMap.get(1).statusOfTask1);
 
@@ -85,11 +83,18 @@ public class Main {
                 case 7:
                     System.out.println("Update подзадачу");
                     String name1Up = ("Подзадача 1");
-                    String nameof1Up = "Описание подзадачи...";
+                    String description1Up = "Описание подзадачи...";
                     epicId = 1;
-                    Subtask subtaskUp = new Subtask(name1Up, nameof1Up, StatusOfTask.DONE, epicId, 3);
 
+                    System.out.println(manager.epicMap.get(1).statusOfTask1);
+
+                    Subtask subtaskUp = new Subtask(name1Up, description1Up, StatusOfTask.DONE, epicId, 2);
                     manager.updateSubtask(epicId, subtaskUp);
+
+                    System.out.println("sub -"+ manager.subTaskMap.get(2).getStatus());
+                    System.out.println(manager.epicMap.get(1).statusOfTask1);
+
+
                     printMenu();
                     break;
                 case 8:
@@ -121,8 +126,8 @@ public class Main {
         System.out.println("3 - Создать sprint3.Epic");
         System.out.println("4 - Напечатать список");
         System.out.println("5 - Обновить sprint3.Task ");
-        System.out.println("6 - Обновить sprint3.Subtask");
-        System.out.println("7 - Обновить sprint3.Epic");
+        System.out.println("6 - Обновить Эпик");
+        System.out.println("7 - Обновить SubTask");
         System.out.println("8 - Удалить sprint3.Task ");
         System.out.println("9 - Удалить sprint3.Subtask");
         System.out.println("10 - Удалить sprint3.Epic");
