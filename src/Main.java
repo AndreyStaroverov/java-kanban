@@ -1,4 +1,8 @@
-package sprint3;
+import Tasks.Epic;
+import Tasks.Subtask;
+import Tasks.Task;
+import Tasks.StatusOfTask;
+import control.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -24,7 +28,7 @@ public class Main {
 
                     Task task = new Task(name, description, StatusOfTask.NEW);
                     manager.createTask(task);
-                    System.out.println(manager.taskMap.get(0).getStatus());
+                    System.out.println(manager.getTaskMap().get(0).getStatus());
 
                     printMenu();
                     break;
@@ -44,17 +48,17 @@ public class Main {
 
                     Epic epic = new Epic(name2, StatusOfTask.NEW);
                     manager.createEpic(epic);
-                    System.out.println(manager.epicMap.get(1).statusOfTask1);
+                    System.out.println(manager.getEpicMap().get(1).getStatus());
 
                     printMenu();
                     break;
                 case 4:
-                    System.out.println(manager.printArrayAllTasks());
-                    System.out.println(manager.printArrayAllSubTasks());
-                    System.out.println(manager.printArrayEpic());
+                    System.out.println(manager.getTasks());
+                    System.out.println(manager.getSubTasks());
+                    System.out.println(manager.getEpics());
 
                     System.out.println("Список подзадач для эпика");
-                    System.out.println(manager.printEpicSubtasks(1));
+                    System.out.println(manager.getEpicSubtasks(1));
 
                     printMenu();
                     break;
@@ -66,17 +70,17 @@ public class Main {
                     Task taskUp = new Task(nameUp, descriptionUp, StatusOfTask.IN_PROGRESS, 0);
 
                     manager.updateTask(taskUp);
-                    System.out.println(manager.taskMap.get(0).getStatus());
+                    System.out.println(manager.getTaskMap().get(0).getStatus());
                     printMenu();
                     break;
                 case 6:
                     System.out.println("Обновляем эпик 1");
                     String name2Up = ("Эпик 1");
-                    ArrayList<Subtask> subTaskList =  manager.printEpicSubtasks(1);
+                    ArrayList<Subtask> subTaskList =  manager.getEpicSubtasks(1);
 
                     Epic epicUp = new Epic(name2Up, subTaskList, 1);
                     manager.updateEpic(epicUp);
-                    System.out.println(manager.epicMap.get(1).statusOfTask1);
+                    System.out.println(manager.getEpicMap().get(1).getStatus());
 
                     printMenu();
                     break;
@@ -86,13 +90,13 @@ public class Main {
                     String description1Up = "Описание подзадачи...";
                     epicId = 1;
 
-                    System.out.println(manager.epicMap.get(1).statusOfTask1);
+                    System.out.println(manager.getEpicMap().get(1).getStatus());
 
                     Subtask subtaskUp = new Subtask(name1Up, description1Up, StatusOfTask.DONE, epicId, 2);
                     manager.updateSubtask(epicId, subtaskUp);
 
-                    System.out.println("sub -"+ manager.subTaskMap.get(2).getStatus());
-                    System.out.println(manager.epicMap.get(1).statusOfTask1);
+                    System.out.println("sub -"+ manager.getSubTaskMap().get(2).getStatus());
+                    System.out.println(manager.getEpicMap().get(1).getStatus());
 
 
                     printMenu();

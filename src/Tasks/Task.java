@@ -1,9 +1,10 @@
-package sprint3;
+package Tasks;
 
 public class Task {
-    public String name;
-    public String description;
-    private StatusOfTask statusOfTask;
+    protected String name;
+    protected String description;
+
+    protected StatusOfTask statusOfTask;
     protected Integer taskid;
     public Task(String name, String description, StatusOfTask statusOfTask) {
         this.name = name;
@@ -16,10 +17,25 @@ public class Task {
         this.statusOfTask = statusOfTask;
         this.taskid = id;
     }
-    public Task(){
+    public Task(String name){
+        this.name = name;
+    }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
     public StatusOfTask getStatus() {
-
         return statusOfTask;
     }
 
