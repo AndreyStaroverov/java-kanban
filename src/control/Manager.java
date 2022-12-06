@@ -108,11 +108,11 @@ public class Manager {
         for (int i: subTaskMap.keySet()) {
             int eId = subTaskMap.get(i).getEpicId();
             if (id == eId) {
-                delete.add(eId);
+                delete.add(i);
             }
         }
-        for (int i = 0; i < delete.size(); i++) {
-           subTaskMap.remove(delete.get(i));
+        for (Integer integer : delete) {
+            subTaskMap.remove(integer);
         }
 
         epicMap.remove(id);
