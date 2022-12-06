@@ -29,8 +29,8 @@ public class Manager {
 
     public void createSubtask(Subtask subtask, Integer epicId) {
         int subTaskId = id;
-        subTaskMap.put(subTaskId, subtask);
         subtask.setId(id);
+        subTaskMap.put(subTaskId, subtask);
         id++;
         epicMap.get(epicId).getSubtaskList().add(subtask);
         epicMap.get(epicId).setEpicStatus();
