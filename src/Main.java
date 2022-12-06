@@ -28,7 +28,6 @@ public class Main {
 
                     Task task = new Task(name, description, StatusOfTask.NEW);
                     manager.createTask(task);
-                    System.out.println(manager.getTaskMap().get(0).getStatus());
 
                     printMenu();
                     break;
@@ -48,7 +47,6 @@ public class Main {
 
                     Epic epic = new Epic(name2, StatusOfTask.NEW);
                     manager.createEpic(epic);
-                    System.out.println(manager.getEpicMap().get(1).getStatus());
 
                     printMenu();
                     break;
@@ -70,7 +68,6 @@ public class Main {
                     Task taskUp = new Task(nameUp, descriptionUp, StatusOfTask.IN_PROGRESS, 0);
 
                     manager.updateTask(taskUp);
-                    System.out.println(manager.getTaskMap().get(0).getStatus());
                     printMenu();
                     break;
                 case 6:
@@ -80,7 +77,6 @@ public class Main {
 
                     Epic epicUp = new Epic(name2Up, subTaskList, 1);
                     manager.updateEpic(epicUp);
-                    System.out.println(manager.getEpicMap().get(1).getStatus());
 
                     printMenu();
                     break;
@@ -90,14 +86,8 @@ public class Main {
                     String description1Up = "Описание подзадачи...";
                     epicId = 1;
 
-                    System.out.println(manager.getEpicMap().get(1).getStatus());
-
                     Subtask subtaskUp = new Subtask(name1Up, description1Up, StatusOfTask.DONE, epicId, 2);
                     manager.updateSubtask(epicId, subtaskUp);
-
-                    System.out.println("sub -"+ manager.getSubTaskMap().get(2).getStatus());
-                    System.out.println(manager.getEpicMap().get(1).getStatus());
-
 
                     printMenu();
                     break;

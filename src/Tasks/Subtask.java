@@ -1,7 +1,8 @@
 package Tasks;
 
 public class Subtask extends Task{
-private int epicId;
+
+protected int epicId;
 
     public void setEpicId(int epicId) {
         this.epicId = epicId;
