@@ -11,7 +11,11 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        Manager manager = new Manager();
+
+        TaskManager manager = Managers.getDefault();
+        HistoryManager historyManager = Managers.getDefaultHistory();
+
+
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Тест меню для проверки трекера задач на функционирование: id0/Task, id1/Epic, id3/SubTask");
@@ -106,6 +110,18 @@ public class Main {
                     manager.deleteEpic(epicIde);
                     printMenu();
                     break;
+                case 11:
+                    manager.getTaskById(0);
+                    break;
+                case 12:
+                    manager.getSubTaskById(2);
+                    break;
+                case 13:
+                    manager.getEpicById(1);
+                    break;
+                case 14:
+                    System.out.println(manager.getHistory());
+                    break;
                 default:
                     System.out.println("Выбор неверный.");
             }
@@ -125,7 +141,11 @@ public class Main {
         System.out.println("8 - Удалить sprint3.Task ");
         System.out.println("9 - Удалить sprint3.Subtask");
         System.out.println("10 - Удалить sprint3.Epic");
+        System.out.println("11 - Получить Таск для проверки истории");
+        System.out.println("12 - Получить Сабтаск для проверки истории");
+        System.out.println("13 - Получить Эпик для проверки истории");
+        System.out.println("14 - Вывести историю");
         System.out.println("0 - выход");
-    }
+   }
 }
 

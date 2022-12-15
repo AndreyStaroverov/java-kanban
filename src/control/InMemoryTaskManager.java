@@ -6,13 +6,16 @@ import Tasks.Task;
 
 import java.util.*;
 
-public class Manager {
+public class InMemoryTaskManager implements TaskManager {
     private Integer id = 0;
 
     private final HashMap<Integer, Task> taskMap = new HashMap<>(); // Integer = Id
     private final HashMap<Integer, Epic> epicMap = new HashMap<>();
     private final HashMap<Integer, Subtask> subTaskMap = new HashMap<>();
 
+    InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
+
+    @Override
     public void createTask(Task task) {
         int taskId = id;
         task.setId(id);
@@ -20,6 +23,7 @@ public class Manager {
         id++;
     }
 
+    @Override
     public void createEpic(Epic epic) {
         int epicId = id;
         epic.setId(id);
@@ -27,6 +31,7 @@ public class Manager {
         id++;
     }
 
+    @Override
     public void createSubtask(Subtask subtask, Integer epicId) {
         int subTaskId = id;
         subtask.setId(id);
@@ -35,6 +40,8 @@ public class Manager {
         epicMap.get(epicId).getSubtaskList().add(subtask);
         epicMap.get(epicId).setEpicStatus();
     }
+
+    @Override
     public List<Task> getTasks() {
         ArrayList<Task> allTasks = new ArrayList<>();
         for (int k: taskMap.keySet()){
@@ -42,6 +49,8 @@ public class Manager {
         }
        return allTasks;
     }
+
+    @Override
     public List<Subtask> getSubTasks() {
         ArrayList<Subtask> allSubTasks = new ArrayList<>();
         for (int k : subTaskMap.keySet()) {
@@ -49,6 +58,8 @@ public class Manager {
         }
         return allSubTasks;
     }
+
+    @Override
     public List<Epic> getEpics() {
         ArrayList<Epic> allEpics = new ArrayList<>();
         for (int k : epicMap.keySet()) {
@@ -64,6 +75,7 @@ public class Manager {
         epicMap.put(epic.getId(), epic);
     }
 
+    @Override
     public void updateSubtask(int epicId, Subtask subtask) {
         subTaskMap.put(subtask.getId(), subtask);
         for (int k = 0; k < epicMap.get(epicId).getSubtaskList().size(); k++) {
@@ -77,10 +89,12 @@ public class Manager {
         epicMap.get(epicId).setEpicStatus();
     }
 
+    @Override
     public void deleteTask(int id) {
         taskMap.remove(id);
     }
 
+    @Override
     public void deleteAllTasks(){
         epicMap.clear();
         taskMap.clear();
@@ -90,6 +104,7 @@ public class Manager {
         }
     }
 
+    @Override
     public void deleteSubtask(int id) {
         int eId = subTaskMap.get(id).getEpicId();
         for (int k = 0; k < epicMap.get(eId).getSubtaskList().size(); k++) {
@@ -103,6 +118,7 @@ public class Manager {
         epicMap.get(eId).setEpicStatus();
     }
 
+    @Override
     public void deleteEpic(int id) {
         ArrayList<Integer> delete = new ArrayList<>();
         for (int i: subTaskMap.keySet()) {
@@ -118,15 +134,25 @@ public class Manager {
         epicMap.remove(id);
     }
 
+    @Override
     public Task getTaskById(int id) {
+        historyManager.add(taskMap.get(id));
         return taskMap.get(id);
     }
+
+    @Override
     public Subtask getSubTaskById(int id) {
+        historyManager.add(subTaskMap.get(id));
         return subTaskMap.get(id);
     }
+
+    @Override
     public Epic getEpicById(int id) {
+        historyManager.add(epicMap.get(id));
         return epicMap.get(id);
     }
+
+    @Override
     public ArrayList<Subtask> getEpicSubtasks(int epicId){
         if (epicMap.containsKey(epicId)){
             ArrayList<Subtask> subTasksList = epicMap.get(epicId).getSubtaskList();
@@ -136,4 +162,8 @@ public class Manager {
         }
     }
 
+    @Override
+    public List<Task> getHistory(){
+        return historyManager.getHistory();
+    }
 }
