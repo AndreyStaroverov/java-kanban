@@ -5,6 +5,7 @@ import Tasks.StatusOfTask;
 import control.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -77,7 +78,7 @@ public class Main {
                 case 6:
                     System.out.println("Обновляем эпик 1");
                     String name2Up = ("Эпик 1");
-                    ArrayList<Subtask> subTaskList =  manager.getEpicSubtasks(1);
+                    List<Subtask> subTaskList =  manager.getEpicSubtasks(1);
 
                     Epic epicUp = new Epic(name2Up, subTaskList, 1);
                     manager.updateEpic(epicUp);
