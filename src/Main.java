@@ -17,6 +17,7 @@ public class Main {
         HistoryManager historyManager = Managers.getDefaultHistory();
 
 
+
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Тест меню для проверки трекера задач на функционирование: id0/Task, id1/Epic, id3/SubTask");
@@ -128,7 +129,6 @@ public class Main {
             }
         }
     }
-
 
 
     public static void printMenu(){

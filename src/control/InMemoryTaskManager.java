@@ -15,6 +15,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
+
     @Override
     public void createTask(Task task) {
         int taskId = id;
@@ -92,6 +93,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteTask(int id) {
         taskMap.remove(id);
+        historyManager.remove(id);
     }
 
     @Override
@@ -116,6 +118,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         subTaskMap.remove(id);
         epicMap.get(eId).setEpicStatus();
+        historyManager.remove(id);
     }
 
     @Override
@@ -132,6 +135,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         epicMap.remove(id);
+        historyManager.remove(id);
     }
 
     @Override
