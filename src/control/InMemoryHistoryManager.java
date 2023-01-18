@@ -6,23 +6,20 @@ import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    CustomLinkedList customLinkedList = new CustomLinkedList();
+    private CustomLinkedList customLinkedList = new CustomLinkedList();
 
  @Override
  public void add(Task task) {
-     if (!getHistory().isEmpty()) {
-         if (getHistory().contains(task)) {
-             getHistory().remove(task);
-             int id = task.getId();
+     int id = task.getId();
+
+     if (customLinkedList.head != null) {
+         if (customLinkedList.getCustomLinkedMap().get(id) != null) {
              remove(id);
-             customLinkedList.LinkLast(task);
-         } else {
-             customLinkedList.LinkLast(task);
          }
-     } else {
-         customLinkedList.LinkLast(task);
      }
-     }
+     customLinkedList.linkLast(task);
+ }
+
 
     @Override
     public List<Task> getHistory() {
@@ -31,7 +28,6 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(int id) {
-        getHistory().remove(id);
         Node node = customLinkedList.getCustomLinkedMap().remove(id);
         customLinkedList.removeNode(node);
     }
@@ -49,19 +45,17 @@ public class InMemoryHistoryManager implements HistoryManager {
 
       private final Map<Integer, Node> customLinkedMap = new HashMap<>();
 
-      void LinkLast(Task task) {
+      void linkLast(Task task) {
           int id = task.getId();
           final Node oldtail = tail;
           final Node newtail = new Node(oldtail, task, null);
           tail = newtail;
           if (oldtail == null) {
               head = newtail;
-              customLinkedMap.put(id, newtail);
           } else {
               oldtail.next = newtail;
-              customLinkedMap.put(id, newtail);
           }
-
+          customLinkedMap.put(id, newtail);
       }
 
 
@@ -71,32 +65,28 @@ public class InMemoryHistoryManager implements HistoryManager {
 
           if (currentNode == null) {
               return historyTasks;
-          } else {
-              while (currentNode.next != null) {
+          }
+          while (currentNode.next != null) {
                   historyTasks.add(currentNode.data);
                   currentNode = currentNode.next;
               }
               historyTasks.add(currentNode.data);
-          }
           return historyTasks;
       }
 
       void removeNode(Node node) {
-          int idNode = node.data.getId();
-          customLinkedMap.remove(idNode);
-          Node currentNode = head;
-          Node prevNode = null;
+          customLinkedMap.remove(node.data.getId());
+          Node currentNode = node;
 
-          while (currentNode.next != null) {
-              if (currentNode == node) {
-                  if (currentNode == head) {
-                      head = currentNode.next;
-                  } else {
-                      prevNode.next = currentNode.next;
-                  }
-              }
-              prevNode = currentNode;
-              currentNode = currentNode.next;
+          if (currentNode == head) {
+              head = currentNode.next;
+              currentNode.prev = null;
+          } else if (currentNode == tail) {
+              tail = currentNode.prev;
+              currentNode.next = null;
+          } else {
+              currentNode.prev.next = currentNode.next;
+              currentNode.next.prev = currentNode.prev;
           }
       }
   }
