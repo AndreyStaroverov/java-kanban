@@ -8,6 +8,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     private CustomLinkedList customLinkedList = new CustomLinkedList();
 
+
     @Override
     public void add(Task task) {
          int id = task.getId();
@@ -18,8 +19,7 @@ public class InMemoryHistoryManager implements HistoryManager {
                  }
              }
              customLinkedList.linkLast(task);
- }
-
+    }
 
     @Override
     public List<Task> getHistory() {
@@ -103,10 +103,11 @@ public class InMemoryHistoryManager implements HistoryManager {
     protected Node next;
     protected Node prev;
 
-    protected Node(Node prev, Task data,Node next) {
+
+     protected Node(Node prev, Task data,Node next) {
         this.data = data;
         this.next = next;
         this.prev = prev;
-    }
-}
+     }
+  }
 
