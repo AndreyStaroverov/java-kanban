@@ -4,7 +4,7 @@ import Tasks.Task;
 import Tasks.StatusOfTask;
 import control.*;
 
-import java.util.ArrayList;
+import java.io.File;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,9 +13,10 @@ public class Main {
 
     public static void main(String[] args) {
 
+        File file = new File("C:\\Users\\andre\\dev\\java-kanban\\resources\\HistorySaver.csv");
+
         TaskManager manager = Managers.getDefault();
         HistoryManager historyManager = Managers.getDefaultHistory();
-
 
 
         Scanner scanner = new Scanner(System.in);

@@ -170,4 +170,37 @@ public class InMemoryTaskManager implements TaskManager {
     public List<Task> getHistory(){
         return historyManager.getHistory();
     }
+
+    protected HistoryManager getHistoryManager() {
+        return historyManager;
+    }
+
+    protected HashMap<Integer, Task> getTaskMap() {
+        return taskMap;
+    }
+
+    protected void setSubtaskMap(Subtask task) {
+        subTaskMap.put(task.getId(), task);
+    }
+
+    protected void setEpicMap(Epic epic) {
+        epicMap.put(epic.getId(), epic);
+    }
+
+    protected void setTaskMap(Task task) {
+        taskMap.put(task.getId(), task);
+
+    }
+
+    protected HashMap<Integer, Epic> getEpicMap() {
+        return epicMap;
+    }
+
+    protected HashMap<Integer, Subtask> getSubTaskMap() {
+        return subTaskMap;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

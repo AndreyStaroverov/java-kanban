@@ -3,6 +3,7 @@ package Tasks;
 public class Task {
     protected String name;
     protected String description;
+    protected TypeOfTask task = TypeOfTask.TASK;
 
     protected StatusOfTask statusOfTask;
     protected Integer taskid;
@@ -17,6 +18,15 @@ public class Task {
         this.statusOfTask = statusOfTask;
         this.taskid = id;
     }
+
+    public Task(String name, String description, StatusOfTask statusOfTask, int id, TypeOfTask type) {
+        this.name = name;
+        this.description = description;
+        this.statusOfTask = statusOfTask;
+        this.taskid = id;
+        this.task = type;
+    }
+
     public Task(String name){
         this.name = name;
     }
@@ -35,6 +45,7 @@ public class Task {
     public void setDescription(String description) {
         this.description = description;
     }
+
     public StatusOfTask getStatus() {
         return statusOfTask;
     }
@@ -43,13 +54,15 @@ public class Task {
         this.statusOfTask = status;
     }
 
-
     public void setId(Integer taskid) {
         this.taskid = taskid;
     }
 
-
     public Integer getId() {
         return taskid;
+    }
+
+    public TypeOfTask getType(){
+        return task;
     }
 }
