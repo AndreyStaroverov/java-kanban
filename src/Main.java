@@ -13,7 +13,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        File file = new File("C:\\Users\\andre\\dev\\java-kanban\\resources\\HistorySaver.csv");
+        File file = new File(".\\resources\\HistorySaver.csv");
 
         TaskManager manager = Managers.getDefault();
         HistoryManager historyManager = Managers.getDefaultHistory();
