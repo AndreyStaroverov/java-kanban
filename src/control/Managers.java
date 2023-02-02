@@ -9,7 +9,6 @@ public class Managers {
     static HistoryManager InMemoryHistoryManager;
 
     public static TaskManager getDefault() {
-        //File file = new File("C:\\Users\\andre\\dev\\java-kanban\\resources\\HistorySaver.csv");
         File file = new File(".\\resources\\HistorySaver.csv");
         return new FileBackedTasksManager(file).loadFromFile(file);
     }
