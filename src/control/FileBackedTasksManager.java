@@ -149,39 +149,38 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             }
             fbm.setId(lastId + 1);
         } catch (IOException e) {
-            System.out.println("Error read");
+            throw new ManagerSaveException("Error in read file");
         }
         return fbm;
     }
 
 
     public static String toString(Task task) {
-
         switch (task.getType()) {
             case SUBTASK:
-            Subtask subtask = (Subtask) task;
-            String taskToString = task.getId() + "," +
-                    task.getType() + "," +
-                    task.getName() + "," +
-                    task.getStatus() + "," +
-                    task.getDescription() + "," +
-                    subtask.getEpicId();
-            return taskToString;
+                Subtask subtask = (Subtask) task;
+                String taskToString = task.getId() + "," +
+                        task.getType() + "," +
+                        task.getName() + "," +
+                        task.getStatus() + "," +
+                        task.getDescription() + "," +
+                        subtask.getEpicId();
+                return taskToString;
             case TASK:
-            taskToString = task.getId() + "," +
-                    task.getType() + "," +
-                    task.getName() + "," +
-                    task.getStatus() + "," +
-                    task.getDescription();
-            return taskToString;
+                taskToString = task.getId() + "," +
+                        task.getType() + "," +
+                        task.getName() + "," +
+                        task.getStatus() + "," +
+                        task.getDescription();
+                return taskToString;
             case EPIC:
                 taskToString = task.getId() + "," +
-                    task.getType() + "," +
-                    task.getName() + "," +
-                    task.getStatus();
-            return taskToString;
+                        task.getType() + "," +
+                        task.getName() + "," +
+                        task.getStatus();
+                return taskToString;
             default:
-                return null;
+                throw new IllegalArgumentException("Argument is invalid or null");
         }
     }
 
@@ -207,7 +206,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 super.setEpicMap(epic);
                 return epic;
             default:
-                return null;
+                throw new IllegalArgumentException("Argument is invalid or null");
             }
     }
 
@@ -225,8 +224,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     protected static List<Integer> historyFromString(String value) {
         List<Integer> historyFromString = new ArrayList<>();
         String[] hst = value.split(",");
-        for (int i = 0; i < hst.length; i++) {
-            Integer el = Integer.parseInt(hst[i]);
+        for (String s : hst) {
+            Integer el = Integer.parseInt(s);
             historyFromString.add(el);
         }
         return historyFromString;
