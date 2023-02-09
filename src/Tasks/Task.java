@@ -1,9 +1,15 @@
 package Tasks;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class Task {
     protected String name;
     protected String description;
     protected TypeOfTask task = TypeOfTask.TASK;
+    protected LocalDateTime startTime;
+    protected Duration duration;
 
     protected StatusOfTask statusOfTask;
     protected Integer taskid;
@@ -25,6 +31,17 @@ public class Task {
         this.statusOfTask = statusOfTask;
         this.taskid = id;
         this.task = type;
+    }
+
+    public Task(String name, String description, StatusOfTask statusOfTask, int id, TypeOfTask type,
+                LocalDateTime startTime, int duration) {
+        this.name = name;
+        this.description = description;
+        this.statusOfTask = statusOfTask;
+        this.taskid = id;
+        this.task = type;
+        this.startTime = startTime;
+        this.duration = Duration.ofMinutes(duration);
     }
 
     public Task(String name){
@@ -64,5 +81,9 @@ public class Task {
 
     public TypeOfTask getType(){
         return task;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plus(duration);
     }
 }

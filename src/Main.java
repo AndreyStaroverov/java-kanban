@@ -99,17 +99,17 @@ public class Main {
                     printMenu();
                     break;
                 case 8:
-                    int taskId = 0;
+                    int taskId = 0; //0
                     manager.deleteTask(taskId);
                     printMenu();
                     break;
                 case 9:
-                    int subtaskId = 2;
+                    int subtaskId = 2; //2
                     manager.deleteSubtask(subtaskId);
                     printMenu();
                     break;
                 case 10:
-                    int epicIde = 1;
+                    int epicIde = 1; //1
                     manager.deleteEpic(epicIde);
                     printMenu();
                     break;

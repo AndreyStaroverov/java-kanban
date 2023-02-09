@@ -1,5 +1,6 @@
 package Tasks;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,7 @@ public class Epic extends Task {
 
     protected TypeOfTask epic = TypeOfTask.EPIC;
     protected List<Subtask> subtaskList = new ArrayList<>();
+    protected LocalDateTime endTime;
 
     public Epic (String name, List<Subtask> subtaskList, int id) {
         super(name);
@@ -44,6 +46,8 @@ public class Epic extends Task {
                 statusOfTask = StatusOfTask.NEW;
             } else if (subtaskStatuses.contains(StatusOfTask.DONE)) {
                 statusOfTask = StatusOfTask.DONE;
+            } else if (subtaskStatuses.contains(StatusOfTask.IN_PROGRESS)){
+                statusOfTask =StatusOfTask.IN_PROGRESS;
             } else {
                 statusOfTask = null;
         }
