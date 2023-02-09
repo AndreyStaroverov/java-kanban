@@ -1,5 +1,8 @@
 package Tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Subtask extends Task{
 
     protected TypeOfTask subtask = TypeOfTask.SUBTASK;
@@ -29,6 +32,15 @@ public class Subtask extends Task{
         this.epicId = epicId;
         this.taskid = id;
         this.subtask = type;
+    }
+
+    public Subtask (String name, String description, StatusOfTask statusOfTask, int epicId, TypeOfTask type,
+                    LocalDateTime startTime, int duration) {
+        super(name, description,statusOfTask);
+        this.epicId = epicId;
+        this.subtask = type;
+        this.startTime = startTime;
+        this.duration = Duration.ofMinutes(duration);
     }
 
     @Override

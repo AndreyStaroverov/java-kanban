@@ -13,6 +13,17 @@ public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Epic> epicMap = new HashMap<>();
     private final HashMap<Integer, Subtask> subTaskMap = new HashMap<>();
 
+    Comparator<Task> comparator = new Comparator<Task>() {
+        @Override
+        public int compare(Task o1, Task o2) {
+            if (o1.getStartTime() == null) return 1;
+            if (o2.getStartTime() == null) return -1;
+            return o1.getStartTime().compareTo(o2.getStartTime());
+        }
+    };
+
+    private final TreeSet<Task> prioritizedTasks = new TreeSet<>(comparator);
+
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
 
@@ -22,6 +33,7 @@ public class InMemoryTaskManager implements TaskManager {
         task.setId(id);
         taskMap.put(taskId, task);
         id++;
+        prioritizedTasks.add(task);
     }
 
     @Override
@@ -30,6 +42,7 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setId(id);
         epicMap.put(epicId, epic);
         id++;
+        prioritizedTasks.add(epic);
     }
 
     @Override
@@ -40,6 +53,7 @@ public class InMemoryTaskManager implements TaskManager {
         id++;
         epicMap.get(epicId).getSubtaskList().add(subtask);
         epicMap.get(epicId).setEpicStatus();
+        prioritizedTasks.add(subtask);
     }
 
     @Override
@@ -211,4 +225,11 @@ public class InMemoryTaskManager implements TaskManager {
         this.id = id;
     }
 
+    public TreeSet<Task> getPrioritizedTasks(){
+        return prioritizedTasks;
+    }
+
+    protected void intersectionsCheck(){
+
+    }
 }

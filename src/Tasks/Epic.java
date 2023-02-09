@@ -1,8 +1,11 @@
 package Tasks;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.TreeSet;
 
 public class Epic extends Task {
 
@@ -25,6 +28,15 @@ public class Epic extends Task {
         this.taskid = id;
         this.statusOfTask = st;
         this.epic = type;
+    }
+
+    public Epic (String name, int id, StatusOfTask st, TypeOfTask type, Duration duration, LocalDateTime localDateTime) {
+        super(name);
+        this.taskid = id;
+        this.statusOfTask = st;
+        this.epic = type;
+        this.duration = duration;
+        this.startTime = localDateTime;
     }
 
     public List<Subtask> getSubtaskList() {
@@ -56,5 +68,48 @@ public class Epic extends Task {
 
     public TypeOfTask getType(){
         return epic;
+    }
+
+    public TreeSet<Task> prioritezedSubTasks(){
+        Comparator<Task> comparator = new Comparator<Task>() {
+            @Override
+            public int compare(Task o1, Task o2) {
+                if (o1.getStartTime() == null) return 1;
+                if (o2.getStartTime() == null) return -1;
+                return o1.getStartTime().compareTo(o2.getStartTime());
+            }
+        };
+
+        TreeSet<Task> prioritizedSubTasks = new TreeSet<>(comparator);
+        prioritizedSubTasks.addAll(subtaskList);
+
+        return prioritizedSubTasks;
+    }
+
+    public Duration getDuration(){
+        TreeSet<Task> priorSubs = prioritezedSubTasks();
+        startTime = priorSubs.first().getStartTime();
+        endTime = priorSubs.last().getEndTime();
+
+        Duration.between(startTime, endTime);
+        Duration sum = null;
+        
+        for (int i = 0; i < subtaskList.size(); i++){
+            sum.plus(subtaskList.get(i).duration);
+        }
+        return sum;
+    }
+
+    public LocalDateTime getStartTime(){
+        TreeSet<Task> priorSubs = prioritezedSubTasks();
+        startTime = priorSubs.first().getStartTime();
+        return startTime;
+    }
+
+    @Override
+    public LocalDateTime getEndTime(){
+        TreeSet<Task> priorSubs = prioritezedSubTasks();
+        endTime = priorSubs.last().getEndTime();
+       return endTime;
     }
 }

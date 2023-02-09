@@ -5,7 +5,6 @@ import exception.ManagerSaveException;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
@@ -19,7 +18,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     protected void save() {
         try (FileWriter fileWriter = new FileWriter(file)) {
-            fileWriter.write("id,type,name,status,description,epic \n");
+            fileWriter.write("id,type,name,status,description,epic,startTime,duration,endTime \n");
             for (Task task : super.getTasks()) {
                 String ts = toString(task);
                 fileWriter.write(ts + "\n");

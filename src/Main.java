@@ -1,10 +1,8 @@
-import Tasks.Epic;
-import Tasks.Subtask;
-import Tasks.Task;
-import Tasks.StatusOfTask;
+import Tasks.*;
 import control.*;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
@@ -33,7 +31,9 @@ public class Main {
                     String name = ("Задача 0");
                     String description = "Описание задачи...";
 
-                    Task task = new Task(name, description, StatusOfTask.NEW);
+                    //Task task = new Task(name, description, StatusOfTask.NEW);
+                    Task task = new Task(name, description, StatusOfTask.NEW, TypeOfTask.TASK,
+                            LocalDateTime.of(2022, 10,10,12,30,0), 30);
                     manager.createTask(task);
 
                     printMenu();
@@ -43,7 +43,9 @@ public class Main {
                     String name1 = ("Подзадача 1");
                     String description1 = "Описание подзадачи...";
                     int epicId = 1;
-                    Subtask subtask1 = new Subtask(name1, description1, StatusOfTask.NEW, epicId);
+                    //Subtask subtask1 = new Subtask(name1, description1, StatusOfTask.NEW, epicId);
+                    Subtask subtask1 = new Subtask(name1, description1, StatusOfTask.NEW,epicId,TypeOfTask.SUBTASK,
+                            LocalDateTime.of(2022,9,10,12,30,0), 15);
                     manager.createSubtask(subtask1, epicId);
 
                     printMenu();
@@ -125,6 +127,9 @@ public class Main {
                 case 14:
                     System.out.println(manager.getHistory());
                     break;
+                case 15:
+                    System.out.println(manager.getPrioritizedTasks());
+                    break;
                 default:
                     System.out.println("Выбор неверный.");
             }
@@ -147,6 +152,7 @@ public class Main {
         System.out.println("12 - Получить Сабтаск для проверки истории");
         System.out.println("13 - Получить Эпик для проверки истории");
         System.out.println("14 - Вывести историю");
+        System.out.println("15 - Вывести задачи в приоритете");
         System.out.println("0 - выход");
    }
 }

@@ -8,6 +8,7 @@ public class Task {
     protected String name;
     protected String description;
     protected TypeOfTask task = TypeOfTask.TASK;
+
     protected LocalDateTime startTime;
     protected Duration duration;
 
@@ -39,6 +40,16 @@ public class Task {
         this.description = description;
         this.statusOfTask = statusOfTask;
         this.taskid = id;
+        this.task = type;
+        this.startTime = startTime;
+        this.duration = Duration.ofMinutes(duration);
+    }
+
+    public Task(String name, String description, StatusOfTask statusOfTask, TypeOfTask type,
+                LocalDateTime startTime, int duration) {
+        this.name = name;
+        this.description = description;
+        this.statusOfTask = statusOfTask;
         this.task = type;
         this.startTime = startTime;
         this.duration = Duration.ofMinutes(duration);
@@ -85,5 +96,13 @@ public class Task {
 
     public LocalDateTime getEndTime() {
         return startTime.plus(duration);
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
     }
 }
