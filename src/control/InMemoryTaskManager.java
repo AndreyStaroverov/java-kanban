@@ -97,7 +97,13 @@ public class InMemoryTaskManager implements TaskManager {
         return allEpics;
     }
     public void updateTask(Task task) {
+        prioritizedTasks.add(task);
+        if (intersectionsValid()) {
         taskMap.put(task.getId(), task);
+        } else {
+            prioritizedTasks.remove(task);
+            System.out.println("\nЕсть пересечение во времени задачи\n");
+        }
     }
 
     public void updateEpic(Epic epic) {
@@ -106,6 +112,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateSubtask(int epicId, Subtask subtask) {
+        prioritizedTasks.add(subtask);
+        if (intersectionsValid()) {
         subTaskMap.put(subtask.getId(), subtask);
         for (int k = 0; k < epicMap.get(epicId).getSubtaskList().size(); k++) {
             boolean check;
@@ -116,6 +124,10 @@ public class InMemoryTaskManager implements TaskManager {
         }
         epicMap.get(epicId).getSubtaskList().add(subtask);
         epicMap.get(epicId).setEpicStatus();
+        } else {
+            prioritizedTasks.remove(subtask);
+            System.out.println("\nЕсть пересечение во времени задачи\n");
+        }
     }
 
     @Override
