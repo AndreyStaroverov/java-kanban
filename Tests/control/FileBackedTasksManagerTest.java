@@ -34,7 +34,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         taskManager.getTaskById(0);
 
         final String taskString = taskManager.toString(task);
-        final String stringTaskexp = "0,TASK,Задача 0,NEW,Описание задачи...";
+        final String stringTaskexp = "0,TASK,Задача 0,NEW,Описание задачи...,2022-10-10T12:30,PT30M,2022-10-10T13:00";
 
         assertEquals(stringTaskexp, taskString);
         assertNotNull(taskString);
@@ -47,7 +47,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         final int id = 0;
         final Task task = new Task("Задача 0", "Описание задачи...", StatusOfTask.NEW, id, TypeOfTask.TASK,
                 LocalDateTime.of(2022, 10,10,12,30,0), 30);
-        final String stringTask = "0,TASK,Задача 0,NEW,Описание задачи...";
+        final String stringTask = "0,TASK,Задача 0,NEW,Описание задачи...,2022-10-10T12:30,PT30M,2022-10-10T13:00";
         taskManager.createTask(task);
         taskManager.getTaskById(0);
 
@@ -67,7 +67,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         final int id = 0;
         final Task task = new Task("Задача 0", "Описание задачи...", StatusOfTask.NEW, id, TypeOfTask.TASK,
                 LocalDateTime.of(2022, 10,10,12,30,0), 30);
-        final String stringExpected = "0,TASK,Задача 0,NEW,Описание задачи...";
+        final String stringExpected = "0,TASK,Задача 0,NEW,Описание задачи...,2022-10-10T12:30,PT30M,2022-10-10T13:00";
 
         taskManager.createTask(task);
         taskManager.getTaskById(0);
@@ -118,6 +118,24 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         assertEquals(subtask.getDescription(), subtaskAfterLoad.getDescription());
         assertEquals(subtask.getEpicId(), subtaskAfterLoad.getEpicId());
 
+    }
+
+    @Test
+    void historyFromStringTest(){
+        final int epid = 0;
+        final Epic epic = new Epic("Epic1", epid, StatusOfTask.NEW, TypeOfTask.EPIC);
+        taskManager.createEpic(epic);
+
+        final int id = 1;
+        final Subtask subtask = new Subtask("Sub1", "Do subtask for EPic", StatusOfTask.NEW, epid, id,
+                TypeOfTask.SUBTASK);
+        taskManager.createSubtask(subtask, epid);
+
+        String testStringTwo = "";
+
+        FileBackedTasksManager fbtmTest = FileBackedTasksManager.loadFromFile(file);
+
+        assertTrue(fbtmTest.getHistory().isEmpty());
     }
 
 }

@@ -4,6 +4,9 @@ import Tasks.*;
 import exception.ManagerSaveException;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -163,20 +166,29 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                         task.getName() + "," +
                         task.getStatus() + "," +
                         task.getDescription() + "," +
-                        subtask.getEpicId();
+                        subtask.getEpicId() + "," +
+                        task.getStartTime() + "," +
+                        task.getDuration() + "," +
+                        task.getEndTime();
                 return taskToString;
             case TASK:
                 taskToString = task.getId() + "," +
                         task.getType() + "," +
                         task.getName() + "," +
                         task.getStatus() + "," +
-                        task.getDescription();
+                        task.getDescription()+ "," +
+                        task.getStartTime() + "," +
+                        task.getDuration() + "," +
+                        task.getEndTime();
                 return taskToString;
             case EPIC:
                 taskToString = task.getId() + "," +
                         task.getType() + "," +
                         task.getName() + "," +
-                        task.getStatus();
+                        task.getStatus() + "," +
+                        task.getStartTime() + "," +
+                        task.getDuration() + "," +
+                        task.getEndTime();
                 return taskToString;
             default:
                 throw new IllegalArgumentException("Argument is invalid or null");
@@ -191,17 +203,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         switch (tp) {
             case SUBTASK:
                 int epid = Integer.parseInt(tsk[5]);
-                Subtask subtask = new Subtask(tsk[2], tsk[4], st, epid, id, tp);
+                LocalDateTime timeSub = stringToDate(tsk[6]);
+                Duration durSub = stringToDuration(tsk[7]);
+                Subtask subtask = new Subtask(tsk[2], tsk[4], st, epid, id, tp,timeSub, durSub);
                 super.setSubtaskMap(subtask);
                 super.getEpicMap().get(epid).getSubtaskList().add(subtask);
                 super.getEpicMap().get(epid).setEpicStatus();
                 return subtask;
             case TASK:
-                Task task = new Task(tsk[2], tsk[4], st, id, tp);
+                LocalDateTime time = stringToDate(tsk[5]);
+                Duration dur = stringToDuration(tsk[6]);
+                Task task = new Task(tsk[2], tsk[4], st, id, tp, time,dur);
                 super.setTaskMap(task);
                 return task;
             case EPIC:
-                Epic epic = new Epic(tsk[2], id, st, tp);
+                LocalDateTime timeEp = stringToDate(tsk[4]);
+                Duration durEp = stringToDuration(tsk[5]);
+                Epic epic = new Epic(tsk[2], id, st, tp, durEp,timeEp);
                 super.setEpicMap(epic);
                 return epic;
             default:
@@ -222,11 +240,29 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     protected static List<Integer> historyFromString(String value) {
         List<Integer> historyFromString = new ArrayList<>();
-        String[] hst = value.split(",");
-        for (String s : hst) {
-            Integer el = Integer.parseInt(s);
-            historyFromString.add(el);
+        if(value != null) {
+            String[] hst = value.split(",");
+            for (String s : hst) {
+                Integer el = Integer.parseInt(s);
+                historyFromString.add(el);
+            }
         }
         return historyFromString;
+    }
+
+    protected LocalDateTime stringToDate(String v) {
+        if (v.equals("null")) {
+            return null;
+        } else {
+            return LocalDateTime.parse(v);
+        }
+    }
+
+    protected Duration stringToDuration(String v) {
+        if (v.equals("null")) {
+            return null;
+        } else {
+            return Duration.parse(v);
+        }
     }
 }

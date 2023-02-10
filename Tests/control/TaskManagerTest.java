@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -438,7 +439,7 @@ abstract class TaskManagerTest <T extends TaskManager> {
 
         assertEquals(0, history.size());
 
-        Task task = new Task("tASK1", "Check Test for Manager", StatusOfTask.NEW, 0, TypeOfTask.TASK,
+        final Task task = new Task("tASK1", "Check Test for Manager", StatusOfTask.NEW, 0, TypeOfTask.TASK,
                 LocalDateTime.of(2022, 10,10,12,30,0), 30);
         taskManager.createTask(task);
         final Task taskGet = taskManager.getTaskById(0);
@@ -446,5 +447,49 @@ abstract class TaskManagerTest <T extends TaskManager> {
         assertEquals(task, taskGet);
         assertEquals(1, taskManager.getHistory().size());
         assertEquals(task, taskManager.getHistory().get(0));
+    }
+
+    @Test
+    void correcctlyPrioritezedTasks(){
+        final Task task = new Task("tASK1", "Check Test for Manager", StatusOfTask.NEW, 0, TypeOfTask.TASK,
+                LocalDateTime.of(2022, 10,10,12,30,0), 30);
+        taskManager.createTask(task);
+
+        final int epid = 1;
+        final Epic epic = new Epic("Epic1", epid, StatusOfTask.NEW, TypeOfTask.EPIC);
+        taskManager.createEpic(epic);
+
+        final Subtask subtask = new Subtask("Sub1", "Do subtask for EPic", StatusOfTask.DONE, epid, 1,
+                TypeOfTask.SUBTASK, LocalDateTime.of(2022,10,9,13,50,0),
+                Duration.ofMinutes(15));
+        taskManager.createSubtask(subtask,epid);
+
+        final List<Task> tasks = taskManager.getPrioritizedTasks();
+
+        assertEquals(subtask, tasks.get(0));
+        assertEquals(task, tasks.get(1));
+        assertFalse(tasks.isEmpty());
+    }
+
+    @Test
+    void incorrecctlyPrioritezedTasks(){
+        final Task task = new Task("tASK1", "Check Test for Manager", StatusOfTask.NEW, 0, TypeOfTask.TASK,
+                LocalDateTime.of(2022, 10,10,12,30,0), 30);
+        taskManager.createTask(task);
+
+        final int epid = 1;
+        final Epic epic = new Epic("Epic1", epid, StatusOfTask.NEW, TypeOfTask.EPIC);
+        taskManager.createEpic(epic);
+
+        final Subtask subtask = new Subtask("Sub1", "Do subtask for EPic", StatusOfTask.DONE, epid, 1,
+                TypeOfTask.SUBTASK, LocalDateTime.of(2022,10,10,12,50,0),
+                Duration.ofMinutes(15));
+        taskManager.createSubtask(subtask,epid);
+
+        final List<Task> tasks = taskManager.getPrioritizedTasks();
+
+        assertEquals(task, tasks.get(0));
+        assertEquals(1, tasks.size());
+        assertFalse(tasks.isEmpty());
     }
 }

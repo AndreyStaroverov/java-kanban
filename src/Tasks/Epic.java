@@ -87,29 +87,30 @@ public class Epic extends Task {
     }
 
     public Duration getDuration(){
-        TreeSet<Task> priorSubs = prioritezedSubTasks();
-        startTime = priorSubs.first().getStartTime();
-        endTime = priorSubs.last().getEndTime();
-
-        Duration.between(startTime, endTime);
-        Duration sum = null;
-        
-        for (int i = 0; i < subtaskList.size(); i++){
-            sum.plus(subtaskList.get(i).duration);
+        if(!subtaskList.isEmpty()) {
+            Duration sum = subtaskList.get(0).getDuration();
+            for (int i = 1; i < subtaskList.size(); i++) {
+                Duration d = subtaskList.get(i).duration;
+                duration = sum.plus(d);
+            }
         }
-        return sum;
+        return duration;
     }
 
     public LocalDateTime getStartTime(){
         TreeSet<Task> priorSubs = prioritezedSubTasks();
-        startTime = priorSubs.first().getStartTime();
+        if(!priorSubs.isEmpty()) {
+            startTime = priorSubs.first().getStartTime();
+        }
         return startTime;
     }
 
     @Override
     public LocalDateTime getEndTime(){
         TreeSet<Task> priorSubs = prioritezedSubTasks();
-        endTime = priorSubs.last().getEndTime();
+        if(!priorSubs.isEmpty()) {
+            endTime = priorSubs.last().getEndTime();
+        }
        return endTime;
     }
 }

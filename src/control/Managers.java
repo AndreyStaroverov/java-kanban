@@ -9,8 +9,9 @@ public class Managers {
 
     public static TaskManager getDefault() {
         File file = new File(".\\resources\\HistorySaver.csv");
-        return new InMemoryTaskManager();
-       // return new FileBackedTasksManager(file).loadFromFile(file);
+        //return new InMemoryTaskManager();
+        // return new FileBackedTasksManager(file);
+         return new FileBackedTasksManager(file).loadFromFile(file);
     }
 
      public static HistoryManager getDefaultHistory() {

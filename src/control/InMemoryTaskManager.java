@@ -3,8 +3,10 @@ package control;
 import Tasks.Epic;
 import Tasks.Subtask;
 import Tasks.Task;
+import Tasks.TypeOfTask;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 public class InMemoryTaskManager implements TaskManager {
     private Integer id = 0;
@@ -29,11 +31,17 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void createTask(Task task) {
-        int taskId = id;
-        task.setId(id);
-        taskMap.put(taskId, task);
-        id++;
         prioritizedTasks.add(task);
+        if (intersectionsValid()) {
+            int taskId = id;
+            task.setId(id);
+            taskMap.put(taskId, task);
+            id++;
+            prioritizedTasks.add(task);
+        } else {
+            prioritizedTasks.remove(task);
+            System.out.println("\nЕсть пересечение во времени задачи\n");
+        }
     }
 
     @Override
@@ -47,6 +55,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void createSubtask(Subtask subtask, Integer epicId) {
+        prioritizedTasks.add(subtask);
+        if (intersectionsValid()) {
         int subTaskId = id;
         subtask.setId(id);
         subTaskMap.put(subTaskId, subtask);
@@ -54,6 +64,10 @@ public class InMemoryTaskManager implements TaskManager {
         epicMap.get(epicId).getSubtaskList().add(subtask);
         epicMap.get(epicId).setEpicStatus();
         prioritizedTasks.add(subtask);
+        } else {
+            prioritizedTasks.remove(subtask);
+            System.out.println("\nЕсть пересечение во времени задачи\n");
+        }
     }
 
     @Override
@@ -202,15 +216,17 @@ public class InMemoryTaskManager implements TaskManager {
 
     protected void setSubtaskMap(Subtask task) {
         subTaskMap.put(task.getId(), task);
+        prioritizedTasks.add(task);
     }
 
     protected void setEpicMap(Epic epic) {
         epicMap.put(epic.getId(), epic);
+        prioritizedTasks.add(epic);
     }
 
     protected void setTaskMap(Task task) {
         taskMap.put(task.getId(), task);
-
+        prioritizedTasks.add(task);
     }
 
     protected HashMap<Integer, Epic> getEpicMap() {
@@ -225,11 +241,24 @@ public class InMemoryTaskManager implements TaskManager {
         this.id = id;
     }
 
-    public TreeSet<Task> getPrioritizedTasks(){
-        return prioritizedTasks;
+    public List<Task> getPrioritizedTasks(){
+
+        Predicate<Task> isEpic = p -> p.getType().equals(TypeOfTask.EPIC);
+        prioritizedTasks.removeIf(isEpic);
+
+        return new ArrayList<>(prioritizedTasks);
     }
 
-    protected void intersectionsCheck(){
-
+    protected boolean intersectionsValid(){
+        boolean check = true;
+        List<Task> tasks = getPrioritizedTasks();
+        if(tasks.size() > 1) {
+            for (int i = 1; i < tasks.size(); i++) {
+                if (tasks.get(i).getStartTime() != null && tasks.get(i-1).getEndTime() != null) {
+                    check = tasks.get(i - 1).getEndTime().isBefore(tasks.get(i).getStartTime());
+                }
+            }
+        }
+        return check;
     }
 }

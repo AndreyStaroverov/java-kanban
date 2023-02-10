@@ -42,6 +42,15 @@ public class Subtask extends Task{
         this.startTime = startTime;
         this.duration = Duration.ofMinutes(duration);
     }
+    public Subtask (String name, String description, StatusOfTask statusOfTask, int epicId,int id, TypeOfTask type,
+                    LocalDateTime startTime, Duration duration) {
+        super(name, description,statusOfTask);
+        this.epicId = epicId;
+        this.subtask = type;
+        this.taskid = id;
+        this.startTime = startTime;
+        this.duration = duration;
+    }
 
     @Override
     public Integer getId() {

@@ -45,6 +45,17 @@ public class Task {
         this.duration = Duration.ofMinutes(duration);
     }
 
+    public Task(String name, String description, StatusOfTask statusOfTask, int id, TypeOfTask type,
+                LocalDateTime startTime, Duration duration) {
+        this.name = name;
+        this.description = description;
+        this.statusOfTask = statusOfTask;
+        this.taskid = id;
+        this.task = type;
+        this.startTime = startTime;
+        this.duration = duration;
+    }
+
     public Task(String name, String description, StatusOfTask statusOfTask, TypeOfTask type,
                 LocalDateTime startTime, int duration) {
         this.name = name;
@@ -95,6 +106,9 @@ public class Task {
     }
 
     public LocalDateTime getEndTime() {
+        if (startTime == null) {
+            return null;
+        }
         return startTime.plus(duration);
     }
 
