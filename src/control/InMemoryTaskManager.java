@@ -256,19 +256,6 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     protected boolean intersectionsValid() {
-//        boolean check = true;
-//        List<Task> tasks = getPrioritizedTasks();
-//        if (tasks.size() > 1) {
-//            for (int i = 1; i < tasks.size(); i++) {
-//                if (tasks.get(i).getStartTime() != null && tasks.get(i - 1).getEndTime() != null) {
-//                    if (!tasks.get(i - 1).getEndTime().isBefore(tasks.get(i).getStartTime())){
-//                        check = false;
-//                        return check;
-//                    }
-//                }
-//            }
-//        }
-//        return check;
         boolean check = true;
         LocalDateTime dateTask = null;
 
@@ -276,8 +263,7 @@ public class InMemoryTaskManager implements TaskManager {
             if (task.getStartTime() != null && task.getEndTime() != null) {
                 if (dateTask != null) {
                     if (!dateTask.isBefore(task.getStartTime())) {
-                        check = false;
-                        return check;
+                        return false;
                     }
                 }
                 dateTask = task.getEndTime();
