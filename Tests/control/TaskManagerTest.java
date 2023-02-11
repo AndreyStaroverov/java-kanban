@@ -1,6 +1,7 @@
 package control;
 
 import Tasks.*;
+import exception.TaskValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -11,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-abstract class TaskManagerTest <T extends TaskManager> {
+abstract class TaskManagerTest<T extends TaskManager> {
 
     protected T taskManager;
 
@@ -19,7 +20,7 @@ abstract class TaskManagerTest <T extends TaskManager> {
     public void canCreateTask() {
         final int id = 0;
         Task task = new Task("tASK1", "Check Test for Manager", StatusOfTask.NEW, id, TypeOfTask.TASK,
-                LocalDateTime.of(2022, 10,10,12,30,0), 30);
+                LocalDateTime.of(2022, 10, 10, 12, 30, 0), 30);
         taskManager.createTask(task);
         final Task taskFromManager = taskManager.getTaskById(0);
 
@@ -85,7 +86,7 @@ abstract class TaskManagerTest <T extends TaskManager> {
         assertTrue(check);
 
         Task task = new Task("tASK1", "Check Test for Manager", StatusOfTask.NEW, 0, TypeOfTask.TASK,
-                LocalDateTime.of(2022, 10,10,12,30,0), 30);
+                LocalDateTime.of(2022, 10, 10, 12, 30, 0), 30);
         taskManager.createTask(task);
 
         final List<Task> tasksAfterCreate = taskManager.getTasks();
@@ -93,7 +94,7 @@ abstract class TaskManagerTest <T extends TaskManager> {
 
         assertFalse(checkAfterCreate, "list is Empty");
         assertEquals(1, tasksAfterCreate.size(), "expected < listTask.size");
-        assertEquals(task, tasksAfterCreate.get(0),"Not equals tasks");
+        assertEquals(task, tasksAfterCreate.get(0), "Not equals tasks");
     }
 
     @Test
@@ -107,7 +108,7 @@ abstract class TaskManagerTest <T extends TaskManager> {
         taskManager.createEpic(epic);
         Subtask subtask = new Subtask("Sub1", "Do subtask for EPic", StatusOfTask.NEW, 0, 1,
                 TypeOfTask.SUBTASK);
-        taskManager.createSubtask(subtask,epid);
+        taskManager.createSubtask(subtask, epid);
 
         final List<Subtask> subtasksAfterCreate = taskManager.getSubTasks();
         boolean checkAfterCreate = subtasksAfterCreate.isEmpty();
@@ -138,10 +139,11 @@ abstract class TaskManagerTest <T extends TaskManager> {
     @Test
     void updateTask() {
         Task task = new Task("tASK1", "Check Test for Manager", StatusOfTask.NEW, 0, TypeOfTask.TASK,
-                LocalDateTime.of(2022, 10,10,12,30,0), 30);
+                LocalDateTime.of(2022, 10, 10, 12, 30, 0), 30);
         taskManager.createTask(task);
-        Task updateTask = new Task("tASK1", "Check Test for Manager", StatusOfTask.IN_PROGRESS, 0, TypeOfTask.TASK,
-                LocalDateTime.of(2022, 10,10,12,30,0), 30);
+        Task updateTask = new Task("tASK1", "Check Test for Manager", StatusOfTask.IN_PROGRESS, 0,
+                TypeOfTask.TASK,
+                LocalDateTime.of(2022, 10, 10, 12, 30, 0), 30);
 
         taskManager.updateTask(updateTask);
 
@@ -158,11 +160,11 @@ abstract class TaskManagerTest <T extends TaskManager> {
 
         Subtask subtask = new Subtask("Sub1", "Do subtask for EPic", StatusOfTask.IN_PROGRESS, epid, 1,
                 TypeOfTask.SUBTASK);
-        taskManager.createSubtask(subtask,epid);
+        taskManager.createSubtask(subtask, epid);
 
-        final List<Subtask> subTaskList =  taskManager.getEpicSubtasks(0);
+        final List<Subtask> subTaskList = taskManager.getEpicSubtasks(0);
 
-        Epic updateEpic = new Epic("Epic1",subTaskList, epid);
+        Epic updateEpic = new Epic("Epic1", subTaskList, epid);
         taskManager.updateEpic(updateEpic);
 
         assertNotEquals(epic, taskManager.getEpics().get(0), "Эпики одинаковые");
@@ -179,10 +181,10 @@ abstract class TaskManagerTest <T extends TaskManager> {
 
         Subtask subtask = new Subtask("Sub1", "Do subtask for EPic", StatusOfTask.NEW, epid, 1,
                 TypeOfTask.SUBTASK);
-        taskManager.createSubtask(subtask,epid);
+        taskManager.createSubtask(subtask, epid);
         Subtask updateSubtask = new Subtask("Sub1", "Do subtask for EPic", StatusOfTask.DONE, epid, 1,
                 TypeOfTask.SUBTASK);
-        taskManager.updateSubtask(0,updateSubtask);
+        taskManager.updateSubtask(0, updateSubtask);
 
         final List<Subtask> subList = taskManager.getEpicSubtasks(epid);
         boolean checkSubList = subList.isEmpty();
@@ -200,7 +202,7 @@ abstract class TaskManagerTest <T extends TaskManager> {
     @Test
     void deleteTask() {
         Task task = new Task("tASK1", "Check Test for Manager", StatusOfTask.NEW, 0, TypeOfTask.TASK,
-                LocalDateTime.of(2022, 10,10,12,30,0), 30);
+                LocalDateTime.of(2022, 10, 10, 12, 30, 0), 30);
         taskManager.createTask(task);
         taskManager.deleteTask(0);
 
@@ -214,7 +216,7 @@ abstract class TaskManagerTest <T extends TaskManager> {
     @Test
     void shouldBeExceptionDeleteTask() {
         Task task = new Task("tASK1", "Check Test for Manager", StatusOfTask.NEW, 0, TypeOfTask.TASK,
-                LocalDateTime.of(2022, 10,10,12,30,0), 30);
+                LocalDateTime.of(2022, 10, 10, 12, 30, 0), 30);
         taskManager.createTask(task);
 
         try {
@@ -227,7 +229,7 @@ abstract class TaskManagerTest <T extends TaskManager> {
     @Test
     void deleteAllTasks() {
         Task task = new Task("tASK1", "Check Test for Manager", StatusOfTask.NEW, 0, TypeOfTask.TASK,
-                LocalDateTime.of(2022, 10,10,12,30,0), 30);
+                LocalDateTime.of(2022, 10, 10, 12, 30, 0), 30);
         taskManager.createTask(task);
 
         final int epid = 1;
@@ -236,7 +238,7 @@ abstract class TaskManagerTest <T extends TaskManager> {
 
         Subtask subtask = new Subtask("Sub1", "Do subtask for EPic", StatusOfTask.NEW, epid, 2,
                 TypeOfTask.SUBTASK);
-        taskManager.createSubtask(subtask,epid);
+        taskManager.createSubtask(subtask, epid);
 
         taskManager.deleteAllTasks();
 
@@ -253,7 +255,7 @@ abstract class TaskManagerTest <T extends TaskManager> {
 
         Subtask subtask = new Subtask("Sub1", "Do subtask for EPic", StatusOfTask.DONE, epid, 1,
                 TypeOfTask.SUBTASK);
-        taskManager.createSubtask(subtask,epid);
+        taskManager.createSubtask(subtask, epid);
         final StatusOfTask epicStatus = taskManager.getEpics().get(0).getStatus();
 
         taskManager.deleteSubtask(1);
@@ -275,7 +277,7 @@ abstract class TaskManagerTest <T extends TaskManager> {
 
         Subtask subtask = new Subtask("Sub1", "Do subtask for EPic", StatusOfTask.DONE, epid, 1,
                 TypeOfTask.SUBTASK);
-        taskManager.createSubtask(subtask,epid);
+        taskManager.createSubtask(subtask, epid);
 
         try {
             taskManager.deleteSubtask(10);
@@ -292,7 +294,7 @@ abstract class TaskManagerTest <T extends TaskManager> {
 
         Subtask subtask = new Subtask("Sub1", "Do subtask for EPic", StatusOfTask.DONE, epid, 1,
                 TypeOfTask.SUBTASK);
-        taskManager.createSubtask(subtask,epid);
+        taskManager.createSubtask(subtask, epid);
 
         taskManager.deleteEpic(0);
         boolean check = taskManager.getHistory().contains(epic);
@@ -318,19 +320,20 @@ abstract class TaskManagerTest <T extends TaskManager> {
     @Test
     void canWeGetTaskById() {
         Task task = new Task("tASK1", "Check Test for Manager", StatusOfTask.NEW, 0, TypeOfTask.TASK,
-                LocalDateTime.of(2022, 10,10,12,30,0), 30);
+                LocalDateTime.of(2022, 10, 10, 12, 30, 0), 30);
         taskManager.createTask(task);
 
         final Task taskGet = taskManager.getTaskById(0);
 
-       assertEquals(task, taskGet);
-       assertEquals(1, taskManager.getHistory().size());
+        assertEquals(task, taskGet);
+        assertEquals(1, taskManager.getHistory().size());
 
     }
+
     @Test
-    public void IncorrectGetTaskById(){
+    public void IncorrectGetTaskById() {
         Task task = new Task("tASK1", "Check Test for Manager", StatusOfTask.NEW, 0, TypeOfTask.TASK,
-                LocalDateTime.of(2022, 10,10,12,30,0), 30);
+                LocalDateTime.of(2022, 10, 10, 12, 30, 0), 30);
         taskManager.createTask(task);
 
         try {
@@ -363,14 +366,14 @@ abstract class TaskManagerTest <T extends TaskManager> {
     }
 
     @Test
-    public void IncorrectGetSubtaskById(){
+    public void IncorrectGetSubtaskById() {
         final int epid = 0;
         Epic epic = new Epic("Epic1", epid, StatusOfTask.NEW, TypeOfTask.EPIC);
         taskManager.createEpic(epic);
 
         Subtask subtask = new Subtask("Sub1", "Do subtask for EPic", StatusOfTask.DONE, epid, 1,
                 TypeOfTask.SUBTASK);
-        taskManager.createSubtask(subtask,epid);
+        taskManager.createSubtask(subtask, epid);
 
         try {
             taskManager.getSubTaskById(10);
@@ -393,7 +396,7 @@ abstract class TaskManagerTest <T extends TaskManager> {
     }
 
     @Test
-    public void IncorrectGetEpicById(){
+    public void IncorrectGetEpicById() {
         final int epid = 0;
         Epic epic = new Epic("Epic1", epid, StatusOfTask.NEW, TypeOfTask.EPIC);
         taskManager.createEpic(epic);
@@ -413,7 +416,7 @@ abstract class TaskManagerTest <T extends TaskManager> {
 
         Subtask subtask = new Subtask("Sub1", "Do subtask for EPic", StatusOfTask.DONE, epid, 1,
                 TypeOfTask.SUBTASK);
-        taskManager.createSubtask(subtask,epid);
+        taskManager.createSubtask(subtask, epid);
 
         assertNull(taskManager.getEpicSubtasks(10), "Такой Эпик существует");
     }
@@ -428,7 +431,7 @@ abstract class TaskManagerTest <T extends TaskManager> {
 
         Subtask subtask = new Subtask("Sub1", "Do subtask for EPic", StatusOfTask.DONE, epid, 1,
                 TypeOfTask.SUBTASK);
-        taskManager.createSubtask(subtask,epid);
+        taskManager.createSubtask(subtask, epid);
 
         assertEquals(1, taskManager.getEpicSubtasks(0).size());
     }
@@ -439,8 +442,9 @@ abstract class TaskManagerTest <T extends TaskManager> {
 
         assertEquals(0, history.size());
 
-        final Task task = new Task("tASK1", "Check Test for Manager", StatusOfTask.NEW, 0, TypeOfTask.TASK,
-                LocalDateTime.of(2022, 10,10,12,30,0), 30);
+        final Task task = new Task("tASK1", "Check Test for Manager", StatusOfTask.NEW, 0,
+                TypeOfTask.TASK,
+                LocalDateTime.of(2022, 10, 10, 12, 30, 0), 30);
         taskManager.createTask(task);
         final Task taskGet = taskManager.getTaskById(0);
 
@@ -450,9 +454,10 @@ abstract class TaskManagerTest <T extends TaskManager> {
     }
 
     @Test
-    void correcctlyPrioritezedTasks(){
-        final Task task = new Task("tASK1", "Check Test for Manager", StatusOfTask.NEW, 0, TypeOfTask.TASK,
-                LocalDateTime.of(2022, 10,10,12,30,0), 30);
+    void correcctlyPrioritezedTasks() {
+        final Task task = new Task("tASK1", "Check Test for Manager", StatusOfTask.NEW, 0,
+                TypeOfTask.TASK,
+                LocalDateTime.of(2022, 10, 10, 12, 30, 0), 30);
         taskManager.createTask(task);
 
         final int epid = 1;
@@ -460,9 +465,9 @@ abstract class TaskManagerTest <T extends TaskManager> {
         taskManager.createEpic(epic);
 
         final Subtask subtask = new Subtask("Sub1", "Do subtask for EPic", StatusOfTask.DONE, epid, 1,
-                TypeOfTask.SUBTASK, LocalDateTime.of(2022,10,9,13,50,0),
+                TypeOfTask.SUBTASK, LocalDateTime.of(2022, 10, 9, 13, 50, 0),
                 Duration.ofMinutes(15));
-        taskManager.createSubtask(subtask,epid);
+        taskManager.createSubtask(subtask, epid);
 
         final List<Task> tasks = taskManager.getPrioritizedTasks();
 
@@ -472,9 +477,10 @@ abstract class TaskManagerTest <T extends TaskManager> {
     }
 
     @Test
-    void incorrecctlyPrioritezedTasks(){
-        final Task task = new Task("tASK1", "Check Test for Manager", StatusOfTask.NEW, 0, TypeOfTask.TASK,
-                LocalDateTime.of(2022, 10,10,12,30,0), 30);
+    void incorrecctlyPrioritezedTasks() {
+        final Task task = new Task("tASK1", "Check Test for Manager", StatusOfTask.NEW, 0,
+                TypeOfTask.TASK,
+                LocalDateTime.of(2022, 10, 10, 12, 30, 0), 30);
         taskManager.createTask(task);
 
         final int epid = 1;
@@ -482,14 +488,84 @@ abstract class TaskManagerTest <T extends TaskManager> {
         taskManager.createEpic(epic);
 
         final Subtask subtask = new Subtask("Sub1", "Do subtask for EPic", StatusOfTask.DONE, epid, 1,
-                TypeOfTask.SUBTASK, LocalDateTime.of(2022,10,10,12,50,0),
+                TypeOfTask.SUBTASK, LocalDateTime.of(2022, 10, 10, 12, 50, 0),
                 Duration.ofMinutes(15));
-        taskManager.createSubtask(subtask,epid);
+        assertThrows(TaskValidationException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                taskManager.createSubtask(subtask, epid);
+            }
+        });
 
         final List<Task> tasks = taskManager.getPrioritizedTasks();
 
         assertEquals(task, tasks.get(0));
         assertEquals(1, tasks.size());
         assertFalse(tasks.isEmpty());
+    }
+
+    @Test
+    void incorrecctlyPrioritezedTasksTwoCase() {
+        final int id = 0;
+        final Task task = new Task("Задача 0", "Описание задачи...", StatusOfTask.NEW, id,
+                TypeOfTask.TASK,
+                LocalDateTime.of(2022, 10, 10, 12, 30, 0), 30);
+        final Task task2 = new Task("Задача 0", "Описание задачи...", StatusOfTask.NEW, id,
+                TypeOfTask.TASK,
+                LocalDateTime.of(2022, 10, 10, 16, 31, 0), 30);
+        final Task task3 = new Task("Задача 0", "Описание задачи...", StatusOfTask.NEW, id,
+                TypeOfTask.TASK,
+                LocalDateTime.of(2022, 10, 10, 12, 31, 0), 30);
+        assertThrows(TaskValidationException.class, new Executable() {
+            @Override
+            public void execute() throws TaskValidationException {
+                taskManager.createTask(task);
+                taskManager.createTask(task2);
+                taskManager.createTask(task3);
+            }
+        });
+
+        assertEquals(2, taskManager.getPrioritizedTasks().size());
+    }
+
+    @Test
+    void testForThrowExcInTask() {
+        final int id = 0;
+        final Task task = new Task("Задача 0", "Описание задачи...", StatusOfTask.NEW, id, TypeOfTask.TASK,
+                LocalDateTime.of(2022, 10, 10, 12, 30, 0), 30);
+        final Task task2 = new Task("Задача 0", "Описание задачи...", StatusOfTask.NEW, id, TypeOfTask.TASK,
+                LocalDateTime.of(2022, 10, 10, 12, 31, 0), 30);
+
+        assertThrows(TaskValidationException.class, new Executable() {
+            @Override
+            public void execute() throws TaskValidationException {
+                taskManager.createTask(task);
+                taskManager.createTask(task2);
+            }
+        }, "Нет исключения");
+
+        assertThrows(TaskValidationException.class, () -> taskManager.updateTask(task2), "Нет исключения");
+    }
+
+    @Test
+    void testForThrowExcInSubtask() {
+        final int epid = 1;
+        final Epic epic = new Epic("Epic1", epid, StatusOfTask.NEW, TypeOfTask.EPIC);
+        taskManager.createEpic(epic);
+
+        final Subtask subtask = new Subtask("Sub1", "Do subtask for EPic", StatusOfTask.DONE, epid, 1,
+                TypeOfTask.SUBTASK, LocalDateTime.of(2022, 10, 9, 13, 50, 0),
+                Duration.ofMinutes(15));
+        final Subtask subtask2 = new Subtask("Sub1", "Do subtask for EPic", StatusOfTask.DONE, epid, 1,
+                TypeOfTask.SUBTASK, LocalDateTime.of(2022, 10, 9, 13, 51, 0),
+                Duration.ofMinutes(15));
+
+        assertThrows(TaskValidationException.class, () -> {
+            taskManager.createTask(subtask);
+            taskManager.createTask(subtask2);
+        }, "Нет исключения");
+
+        assertThrows(TaskValidationException.class, () -> taskManager.updateSubtask(1, subtask2),
+                "Нет исключения");
     }
 }

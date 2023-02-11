@@ -45,7 +45,7 @@ public class Main {
                     int epicId = 1;
                     //Subtask subtask1 = new Subtask(name1, description1, StatusOfTask.NEW, epicId);
                     Subtask subtask1 = new Subtask(name1, description1, StatusOfTask.NEW,epicId,TypeOfTask.SUBTASK,
-                            LocalDateTime.of(2022,10,10,12,50,0), 15);
+                            LocalDateTime.of(2022,10,5,16,50,0), 15);
                     manager.createSubtask(subtask1, epicId);
 
                     printMenu();
