@@ -22,8 +22,8 @@ class ManagersTest {
 
     @Test
     public void shouldReturnNotNullFileBucketTaskManager(){
-        File file = new File(".\\resources\\HistorySaver.csv");
-        FileBackedTasksManager fbtm = Managers.getFileBackedTaskManager(file);
+       // File file = new File(".\\resources\\HistorySaver.csv");
+        FileBackedTasksManager fbtm = Managers.getFileBackedTaskManager();
         assertNotNull(fbtm);
     }
 }
