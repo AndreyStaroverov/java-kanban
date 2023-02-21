@@ -14,11 +14,11 @@ public class Managers {
 
     public static TaskManager getDefault() {
         File file = new File(".\\resources\\HistorySaver.csv");
-        URI uri = URI.create("https://www.getpostman.com/collections/a83b61d9e1c81c10575c");
+        URI uri = URI.create("http://localhost:8078");
         //return new InMemoryTaskManager();
         // return new FileBackedTasksManager(file);
-         return new FileBackedTasksManager(file).loadFromFile(file);
-       // return new HttpTaskManager(uri, file);
+        // return new FileBackedTasksManager(file).loadFromFile(file);
+        return new HttpTaskManager(uri);
     }
 
      public static HistoryManager getDefaultHistory() {

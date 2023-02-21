@@ -2,6 +2,7 @@ package Servers;
 
 
 import Tasks.Epic;
+import Tasks.StatusOfTask;
 import Tasks.Subtask;
 import Tasks.Task;
 import com.google.gson.Gson;
@@ -10,8 +11,11 @@ import com.sun.net.httpserver.HttpServer;
 import control.Managers;
 import control.TaskManager;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.http.HttpClient;
 import java.util.regex.Pattern;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -23,19 +27,19 @@ public class HttpTaskServer {
     private final HttpServer httpServer;
     private Gson gson;
 
-    private final TaskManager taskManager;
-
-    public static void main(String[] args) throws IOException {
-        HttpTaskServer httpTaskServer = new HttpTaskServer();
-        httpTaskServer.start();
+    public TaskManager getTaskManager() {
+        return taskManager;
     }
 
+    private final TaskManager taskManager;
+
     public HttpTaskServer() throws IOException {
-        this.taskManager = Managers.getFileBackedTaskManager();
+        this.taskManager = Managers.getDefault();
         gson = Managers.getGson();
         httpServer = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
         httpServer.createContext("/tasks", this::handleTasks);
     }
+
 
     private void handleTasks(HttpExchange httpExchange) throws IOException {
         try {
@@ -258,7 +262,7 @@ public class HttpTaskServer {
         httpServer.start();
     }
 
-    protected void stop() {
+    public void stop() {
         httpServer.stop(0);
         System.out.println("Server is stoped on port - " + PORT);
     }

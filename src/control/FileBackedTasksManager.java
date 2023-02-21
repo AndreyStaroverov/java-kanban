@@ -18,6 +18,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         this.file = file;
     }
 
+    public FileBackedTasksManager() {
+        this.file = null;
+    }
+
 
     protected void save() {
         try (FileWriter fileWriter = new FileWriter(file)) {

@@ -1,7 +1,11 @@
+import Servers.HttpTaskServer;
+import Servers.KVServer;
 import Tasks.*;
 import control.*;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InvalidObjectException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
@@ -9,13 +13,16 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         File file = new File(".\\resources\\HistorySaver.csv");
 
-        TaskManager manager = Managers.getDefault();
-        HistoryManager historyManager = Managers.getDefaultHistory();
+        HttpTaskServer httpTaskServer = new HttpTaskServer();
+        httpTaskServer.start();
+        new KVServer().start();
 
+        HttpTaskManager manager = (HttpTaskManager) Managers.getDefault();
+        HistoryManager historyManager = Managers.getDefaultHistory();
 
         Scanner scanner = new Scanner(System.in);
 
@@ -130,6 +137,12 @@ public class Main {
                 case 15:
                     System.out.println(manager.getPrioritizedTasks());
                     break;
+                case 16:
+                    HttpTaskManager manager1 = HttpTaskManager.loadFromServer(manager.getKvTaskClient());
+                    System.out.println(manager1.getHistory());
+                    System.out.println(manager1.getPrioritizedTasks());
+                    System.out.println(manager1.getTasks());
+                    break;
                 default:
                     System.out.println("Выбор неверный.");
             }
@@ -153,6 +166,7 @@ public class Main {
         System.out.println("13 - Получить Эпик для проверки истории");
         System.out.println("14 - Вывести историю");
         System.out.println("15 - Вывести задачи в приоритете");
+        System.out.println("16 - start HTTP load from sever");
         System.out.println("0 - выход");
    }
 }
