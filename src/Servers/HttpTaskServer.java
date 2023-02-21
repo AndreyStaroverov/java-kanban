@@ -34,12 +34,12 @@ public class HttpTaskServer {
         gson = Managers.getGson();
         httpServer = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
         httpServer.createContext("/tasks/", this::handleTasksPriorityAndHistory);
-        httpServer.createContext("/tasks/task/", this::handleTasksOnly);
+        httpServer.createContext("/tasks/task/", this::handleTasks);
         httpServer.createContext("/tasks/epic/", this::handleEpics);
         httpServer.createContext("/tasks/subtask/", this::handleSubtasks);
     }
 
-    private void handleTasksOnly(HttpExchange httpExchange) throws IOException {
+    private void handleTasks(HttpExchange httpExchange) throws IOException {
         try {
             String path = httpExchange.getRequestURI().getPath();
             String requestMethod = httpExchange.getRequestMethod();
