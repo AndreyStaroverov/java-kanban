@@ -6,6 +6,7 @@ import control.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
@@ -138,7 +139,7 @@ public class Main {
                     System.out.println(manager.getPrioritizedTasks());
                     break;
                 case 16:
-                    HttpTaskManager manager1 = HttpTaskManager.loadFromServer(manager.getKvTaskClient());
+                    HttpTaskManager manager1 = new HttpTaskManager(URI.create("http://localhost:8078"));
                     System.out.println(manager1.getHistory());
                     System.out.println(manager1.getPrioritizedTasks());
                     System.out.println(manager1.getTasks());

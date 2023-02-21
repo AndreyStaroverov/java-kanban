@@ -38,6 +38,7 @@ public class HttpTaskServer {
         gson = Managers.getGson();
         httpServer = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
         httpServer.createContext("/tasks", this::handleTasks);
+       // httpServer.createContext("/tasks/task/", this::handleTasksOnly);
     }
 
 

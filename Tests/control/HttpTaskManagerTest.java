@@ -41,7 +41,7 @@ class HttpTaskManagerTest extends TaskManagerTest<HttpTaskManager> {
         taskManager.createTask(task);
         final Task taskTest = taskManager.getTaskById(0);
 
-        final String result = taskManager.getKvTaskClient().load("manager");
+        final String result = taskManager.kvTaskClient.load("manager");
 
         assertEquals(stringExpected, result);
         assertEquals(task.getName(), taskTest.getName());
@@ -50,7 +50,7 @@ class HttpTaskManagerTest extends TaskManagerTest<HttpTaskManager> {
         taskManager.createTask(taskTwo);
         final Task taskTestTwo = taskManager.getTaskById(1);
         final String exp = "0,1";
-        final String res = taskManager.getKvTaskClient().load("history");
+        final String res = taskManager.kvTaskClient.load("history");
 
         assertEquals(2, taskManager.getHistory().size());
         assertEquals(exp, res);
@@ -76,7 +76,7 @@ class HttpTaskManagerTest extends TaskManagerTest<HttpTaskManager> {
         final List<Task> historyTest = taskManager.getHistory();
         final List<Task> priorityTest = taskManager.getPrioritizedTasks();
 
-        HttpTaskManager manager = HttpTaskManager.loadFromServer(taskManager.getKvTaskClient()); // новый менеджер
+        HttpTaskManager manager = HttpTaskManager.loadFromServer(taskManager.kvTaskClient); // новый менеджер
 
         final List<Task> historyTestLoad = manager.getHistory();
         final List<Task> priorityTestLoad = manager.getPrioritizedTasks();

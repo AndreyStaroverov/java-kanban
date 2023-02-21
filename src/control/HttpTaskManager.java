@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class HttpTaskManager extends FileBackedTasksManager {
-    private static KVTaskClient kvTaskClient;
+    protected KVTaskClient kvTaskClient;
     private static final Gson gson = Managers.getGson();
     private static String key = "manager";
 
@@ -20,7 +20,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
         try {
            kvTaskClient = new KVTaskClient(uri);
        } catch (IOException | InterruptedException e) {
-           throw new RuntimeException();
+           e.printStackTrace();
        }
     }
 
@@ -55,6 +55,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
 
     public static HttpTaskManager loadFromServer(KVTaskClient kvTaskClient) {
         HttpTaskManager httpTM = new HttpTaskManager(URI.create("http://localhost:8078"));
+        kvTaskClient = httpTM.kvTaskClient;
         try  {
             int lastId = 0;
             String[] lines = kvTaskClient.load("manager").split("/");
@@ -81,9 +82,6 @@ public class HttpTaskManager extends FileBackedTasksManager {
         return httpTM;
     }
 
-    public static KVTaskClient getKvTaskClient() {
-        return kvTaskClient;
-    }
 
     @Override
     protected Task fromString(String value) {
