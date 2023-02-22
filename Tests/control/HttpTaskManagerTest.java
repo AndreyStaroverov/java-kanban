@@ -76,7 +76,7 @@ class HttpTaskManagerTest extends TaskManagerTest<HttpTaskManager> {
         final List<Task> historyTest = taskManager.getHistory();
         final List<Task> priorityTest = taskManager.getPrioritizedTasks();
 
-        HttpTaskManager manager = HttpTaskManager.loadFromServer(taskManager.kvTaskClient); // новый менеджер
+        HttpTaskManager manager = HttpTaskManager.loadFromServer(); // новый менеджер
 
         final List<Task> historyTestLoad = manager.getHistory();
         final List<Task> priorityTestLoad = manager.getPrioritizedTasks();

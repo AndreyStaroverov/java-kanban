@@ -4,6 +4,7 @@ import Servers.KVTaskClient;
 import Tasks.*;
 import com.google.gson.Gson;
 import exception.ManagerSaveException;
+import exception.ServerRegisterException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -19,8 +20,8 @@ public class HttpTaskManager extends FileBackedTasksManager {
     public HttpTaskManager(URI uri) {
         try {
            kvTaskClient = new KVTaskClient(uri);
-       } catch (IOException | InterruptedException e) {
-           e.printStackTrace();
+       } catch (ServerRegisterException e) {
+            throw new ManagerSaveException(e.getMessage(), e);
        }
     }
 
@@ -44,42 +45,42 @@ public class HttpTaskManager extends FileBackedTasksManager {
                 sb.append("/");
             }
 
-            String hs = (historyToString(getHistoryManager()));
+            String hs = historyToString(getHistoryManager());
 
             kvTaskClient.put("manager", sb.toString());
             kvTaskClient.put("history", hs);
-        } catch (IOException  | InterruptedException e) {
+        } catch (ServerRegisterException e) {
             throw new ManagerSaveException();
         }
     }
 
-    public static HttpTaskManager loadFromServer(KVTaskClient kvTaskClient) {
-        HttpTaskManager httpTM = new HttpTaskManager(URI.create("http://localhost:8078"));
-        kvTaskClient = httpTM.kvTaskClient;
+    public static HttpTaskManager loadFromServer() {
+        HttpTaskManager manager = new HttpTaskManager(URI.create("http://localhost:8078"));
+         KVTaskClient kvTaskClient = manager.kvTaskClient;
         try  {
             int lastId = 0;
             String[] lines = kvTaskClient.load("manager").split("/");
             for (String lin: lines) {
-                lastId = httpTM.fromString(lin).getId();
+                lastId = manager.fromString(lin).getId();
             }
                 List<Integer> history = historyFromString(kvTaskClient.load("history"));
                 for (Integer i : history) {
-                    if (httpTM.getTaskMap().containsKey(i)) {
-                        httpTM.getHistoryManager().add(httpTM.getTaskMap().get(i));
+                    if (manager.getTaskMap().containsKey(i)) {
+                        manager.getHistoryManager().add(manager.getTaskMap().get(i));
                     }
-                    if (httpTM.getEpicMap().containsKey(i)) {
-                        httpTM.getHistoryManager().add(httpTM.getEpicMap().get(i));
+                    if (manager.getEpicMap().containsKey(i)) {
+                        manager.getHistoryManager().add(manager.getEpicMap().get(i));
                     }
-                    if (httpTM.getSubTaskMap().containsKey(i)) {
-                        httpTM.getHistoryManager().add(httpTM.getSubTaskMap().get(i));
+                    if (manager.getSubTaskMap().containsKey(i)) {
+                        manager.getHistoryManager().add(manager.getSubTaskMap().get(i));
                     }
                 }
 
-            httpTM.setId(lastId + 1);
-        } catch (IOException  | InterruptedException e) {
+            manager.setId(lastId + 1);
+        } catch (ServerRegisterException e) {
             throw new ManagerSaveException("Error in server");
         }
-        return httpTM;
+        return manager;
     }
 
 

@@ -1,17 +1,28 @@
 package control;
 
+import Servers.HttpTaskServer;
+import Servers.KVServer;
+import exception.ManagerSaveException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ManagersTest {
 
     @Test
-    public void shouldReturnNotNullTaskManagerGetDefault(){
-        TaskManager tm = Managers.getDefault();
-        assertNotNull(tm);
+    public void shouldReturnNotNullTaskManagerGetDefault() throws IOException {
+        assertThrows(ManagerSaveException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                TaskManager tm = Managers.getDefault();
+                 assertNotNull(tm);
+            }
+        });
+
     }
 
     @Test

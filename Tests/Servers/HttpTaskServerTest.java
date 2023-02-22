@@ -43,12 +43,12 @@ class HttpTaskServerTest {
     }
 
     @BeforeEach
-    public void beforeEach() throws IOException {
-        httpTaskServer = new HttpTaskServer();
-        httpTaskServer.start();
+    public void beforeEach() throws IOException, InterruptedException {
         kvServer = new KVServer();
         kvServer.start();
-        httpTaskManager = (HttpTaskManager) httpTaskServer.getTaskManager();
+        httpTaskServer = new HttpTaskServer();
+        httpTaskServer.start();
+        httpTaskManager = (HttpTaskManager) httpTaskServer.taskManager;
     }
 
     @AfterEach
@@ -420,4 +420,34 @@ class HttpTaskServerTest {
         });
         assertTrue(httpTaskManager.getEpicSubtasks(1).isEmpty());
     }
+
+    @Test
+    void testNewChecker() throws IOException, InterruptedException {
+
+        setTasksSet();
+
+        final int id = 0;
+        final Task task = new Task("Задача 0", "Описание задачи...", StatusOfTask.IN_PROGRESS, id, TypeOfTask.TASK,
+                LocalDateTime.of(2022, 10, 10, 12, 30, 0), 30);
+        String json = gson.toJson(task);
+
+        HttpClient client = HttpClient.newBuilder().build();
+        HttpRequest request = HttpRequest.newBuilder()
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .uri(URI.create("http://localhost:8080/tasks/task/"))
+                .version(HttpClient.Version.HTTP_1_1).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(200, response.statusCode());
+
+        String body = response.body();
+        Task taskTest = httpTaskManager.getTaskById(0);
+
+        assertNotNull(body, "List is Empty");
+        assertEquals(task.getId(), taskTest.getId(), "Не совпадают");
+        assertEquals(task.getName(), taskTest.getName());
+        assertNotEquals(task.getStatus(), taskTest.getStatus());
+
+    }
+
 }

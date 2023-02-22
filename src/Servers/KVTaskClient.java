@@ -1,5 +1,7 @@
 package Servers;
 
+import exception.ServerRegisterException;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -13,20 +15,16 @@ public class KVTaskClient {
     private HttpClient client;
     private String API_TOKEN;
 
-    public KVTaskClient(URI url) throws IOException, InterruptedException {
-        try {
+    public KVTaskClient(URI url) throws ServerRegisterException {
             this.url = url;
             this.client = HttpClient.newBuilder()
                     .connectTimeout(Duration.ofSeconds(5))
                     .build();
             this.API_TOKEN = register();
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
 
-    public String register() throws IOException, InterruptedException {
+    public String register() throws ServerRegisterException {
         String newUrlString = url + "/register";
         URI newUrl = URI.create(newUrlString);
         HttpRequest request = HttpRequest.newBuilder()
@@ -41,16 +39,16 @@ public class KVTaskClient {
                 return response.body();
             } else {
                 System.out.println("Что-то пошло не так. Сервер вернул код состояния: " + response.statusCode());
-                throw new InterruptedException();
+                throw new ServerRegisterException();
             }
         } catch (IOException | InterruptedException e) { // обрабатываем ошибки отправки запроса
             System.out.println("Во время выполнения запроса ресурса по url-адресу: '" + url + "' возникла ошибка.\n" +
                     "Проверьте, пожалуйста, адрес и повторите попытку.");
-            throw new InterruptedException();
+            throw new ServerRegisterException(e.getMessage(), e);
         }
     }
 
-    public void put(String key, String json) throws IOException, InterruptedException {
+    public void put(String key, String json) {
         String newUrlString = url + "/save/" + key + "?API_TOKEN=" + API_TOKEN;
         URI newUrl = URI.create(newUrlString);
 
@@ -74,7 +72,7 @@ public class KVTaskClient {
         }
     }
 
-    public String load(String key) throws IOException, InterruptedException {
+    public String load(String key) {
         String newUrlString = url + "/load/" + key + "?API_TOKEN=" + API_TOKEN;
         URI newUrl = URI.create(newUrlString);
 
@@ -91,11 +89,12 @@ public class KVTaskClient {
                 return response.body();
             } else {
                 System.out.println("Что-то пошло не так. Сервер вернул код состояния: " + response.statusCode());
+                throw new ServerRegisterException();
             }
         } catch (IOException | InterruptedException e) {
             System.out.println("Во время выполнения запроса ресурса по url-адресу: '" + url + "' возникла ошибка.\n" +
                     "Проверьте, пожалуйста, адрес и повторите попытку.");
+            throw new ServerRegisterException(e.getMessage(), e);
         }
-        return null;
     }
 }
